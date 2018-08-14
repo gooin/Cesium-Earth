@@ -12,7 +12,7 @@ $("#menuLayerStyle").click(function () {
 });
 
 
-var viewer, viewerNav, scene, camera,canvas, magnitude,
+var viewer, viewerNav, scene, camera, canvas, magnitude,
     imageryLayers, cameraHeight, baseLayer, measureHandler, screenCenter;
 var mapboxSatelliteProvider, mapboxStreetsSatelliteProvider,
     mapboxStreetsProvider, mapboxDarkProvider, mapboxPiratesProvider;
@@ -31,7 +31,7 @@ function onload(Cesium) {
     });
     scene = viewer.scene;
     camera = scene.camera;
-    canvas=viewer.canvas;
+    canvas = viewer.canvas;
 
 
 
@@ -151,8 +151,18 @@ function onload(Cesium) {
         var heading = scene.camera.heading;
         var x = Cesium.Math.toDegrees(heading - 0.01);
         var degrees = "rotate(" + x + "deg)";
-        console.log(degrees);
+        // console.log(degrees);
         $("#compass").css("transform", degrees);
+
+
+        // 计算屏幕左上角坐标
+        var coordTopLeft = findCoordinate(new Cesium.Cartesian2(57, 0), new Cesium.Cartesian2(canvas.width, canvas.height))
+        var degreeTopLeft = CesiumHandyFuns.cartesian3ToDegree(Cesium, coordTopLeft);
+        console.log(degreeTopLeft);
+        // 计算屏幕右下角坐标
+        var coordBottomRight = findCoordinate(new Cesium.Cartesian2(canvas.width, canvas.height),new Cesium.Cartesian2(57, 0))
+        var degreeBottomRight = CesiumHandyFuns.cartesian3ToDegree(Cesium, coordBottomRight);
+        console.log(degreeBottomRight);
 
     });
     // 照片开关点击事件
@@ -260,7 +270,7 @@ function onload(Cesium) {
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
 
-    // 计算宽高
+    // 计算坐标点  //即使球体不在屏幕点上
     function findCoordinate(startCoordinates, endCoordinates) {
         var coordinate = scene.camera.pickEllipsoid(startCoordinates, this.ellipsoid);
         // Translate coordinates
@@ -275,8 +285,8 @@ function onload(Cesium) {
         var sy = (y1 < y2) ? 1 : -1;
         var err = dx - dy;
 
-        coordinate = scene.camera.pickEllipsoid({x:x1, y:y1}, this.ellipsoid);
-        if(coordinate) {
+        coordinate = scene.camera.pickEllipsoid({ x: x1, y: y1 }, this.ellipsoid);
+        if (coordinate) {
             return coordinate;
         }
         // Main loop
@@ -291,14 +301,13 @@ function onload(Cesium) {
                 y1 += sy;
             }
 
-            coordinate = scene.camera.pickEllipsoid({x:x1, y:y1}, this.ellipsoid);
-            if(coordinate) {
+            coordinate = scene.camera.pickEllipsoid({ x: x1, y: y1 }, this.ellipsoid);
+            if (coordinate) {
                 return coordinate;
             }
         }
         return;
     }
-    var coord =  findCoordinate(new Cesium.Cartesian2(0,0), new Cesium.Cartesian2(canvas.width, canvas.height))
-    console.log(coord);
+
 
 }

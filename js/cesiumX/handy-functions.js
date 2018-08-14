@@ -27,5 +27,19 @@ var CesiumHandyFuns = {
             longitude: longitude,
             latitude: latitude
         }
-    }
+    },
+    cartesian3ToDegree: function (Cesium, cartesian3) {
+        var radians = Cesium.Cartographic.fromCartesian(cartesian3);
+        var longitude = Cesium.Math.toDegrees(radians.longitude);
+        var latitude = Cesium.Math.toDegrees(radians.latitude);
+        var height = radians.height;
+        if (longitude && latitude) {
+            return {
+                longitude: longitude,
+                latitude: latitude,
+                height: height
+            }
+        }
+        return undefined;
+    },
 };
