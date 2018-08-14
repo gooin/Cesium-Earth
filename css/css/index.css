@@ -1,0 +1,169 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#left-nav {
+    float: left;
+    height: 100%;
+    width: 56px;
+    background-color: #263238;
+}
+
+.icon-button {
+    padding-top: 1em;
+}
+
+.icon-button > i {
+    color: #e0e0e0;
+    text-align: center;
+    margin: 1em auto 1.5em;
+    padding-left: 18px;
+    cursor: pointer;
+}
+
+.navdrawer-nav {
+    /*.navdrawer-nav > .navbar-brand {*/
+    padding-left: 25px;
+}
+
+.layer-chooser {
+    margin-left: 56px;
+}
+
+.navdrawer-content {
+    width: 20rem;
+}
+
+#layerdrawer .navdrawer-content {
+    width: 25rem;
+    /*margin-left: 56px;*/
+}
+
+.card {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.card-img-top {
+    height: 8rem;
+}
+
+.card-body {
+    height: 4.5rem;
+}
+
+.cards {
+    padding-top: 2rem;
+}
+
+.map-radio {
+    z-index: 999;
+    position: absolute;
+    right: 0;
+    top: .5rem;
+}
+
+.list-group {
+    margin: 0 1.5rem;
+}
+
+.media > img {
+    width: 64px;
+    height: 64px;
+}
+
+#cesiumContainer {
+    float: left;
+    width: calc(100% - 56px);
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #000000;
+}
+
+#earth-status {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: 40;
+    font-size: 13px;
+}
+
+#earth-nav {
+    right: 1rem;
+    bottom: calc(18px + .5rem);
+    position: absolute;
+    z-index: auto;
+}
+
+#cesiumNavContainer {
+    height: 7rem;
+    width: 7rem;
+}
+
+.cesium-nav-circle {
+    border-radius: 50%;
+}
+
+.circle-background {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #263238;
+    border-radius: 50%;
+}
+
+.circle-background > i {
+    color: #e0e0e0;
+    text-align: center;
+    padding: .9rem 0 0 .5rem;
+    cursor: pointer;
+}
+
+#myLocation {
+    position: absolute;
+    right: .5rem;
+    bottom: 7.5rem;
+    z-index: 31;
+}
+
+#compass {
+    position: absolute;
+    right: 7.7rem;
+    bottom: .2em;
+    z-index: 31;
+}
+
+#earth-status > .nums {
+    background-color: rgba(0, 0, 0, .7);
+    margin-bottom: 0;
+    float: right;
+    font-size: 13px;
+    color: #bdbdbd;
+    text-shadow: 1px 0 5px #000;
+}
+
+#measure-menu {
+    position: fixed;
+    z-index: 40;
+    right: 0;
+    width: 19rem;
+    height: 10rem;
+    margin: 1.5rem;
+}
+
+#earth-measure .jumbotron {
+    padding: 1rem;
+}
+
+#earth-measure-close {
+    padding: .6rem;
+}
+
+#earth-measure-close:hover {
+    cursor: pointer;
+}
