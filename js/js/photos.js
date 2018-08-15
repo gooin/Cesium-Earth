@@ -11,25 +11,29 @@
 // https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=cecb6169f1a36c661089206db5999df4&tags=nature%2Ccity&accuracy=1&content_type=1&has_geo=1&per_page=200&format=json&auth_token=72157669831022897-5e0d37d79f80a4e8&api_sig=554b72158edd639c3fd4f79ccb2586b8
 
 
-function showPhotos(Cesium, viewer, screenCenter) {
+function showPhotos(Cesium, viewer, screenBounds) {
 
-    var flickrAPI = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=西安";
+
+
+    // var flickrAPI = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=西安";
     // 获取照片列表 URL
     // var flickrSearch = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=388ddf77385fe21f59b62b5133f96d8a&tags=nature,city&accuracy=1&content_type=1&has_geo=1&per_page=100&format=json";
-    var flickrSearch = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=388ddf77385fe21f59b62b5133f96d8a&accuracy=1&content_type=1&has_geo=1&per_page=100&format=json&radius=32";
+    // var flickrSearch = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=388ddf77385fe21f59b62b5133f96d8a&accuracy=1&content_type=1&has_geo=1&per_page=100&format=json&radius=32";
+    var flickrSearch = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=388ddf77385fe21f59b62b5133f96d8a&accuracy=5&content_type=1&has_geo=1&per_page=250 &format=json&bbox=";
     // 获取照片经纬度 URL
     var flickrGetLocationURL = "https://api.flickr.com/services/rest/?method=flickr.photos.geo.getLocation&api_key=388ddf77385fe21f59b62b5133f96d8a&format=json&photo_id=";
 
+    // URL 附加范围
+    flickrSearch+=screenBounds[0]+","+screenBounds[1]+","+screenBounds[2]+","+screenBounds[3];
+    console.log(flickrSearch);
     var lat = "&lat=" + screenCenter.latitude;
     var lon = "&lon=" + screenCenter.longitude;
 
     $.ajax({
-        url: flickrSearch + lat + lon,
+        url: flickrSearch,
         dataType: "jsonp", // jsonp
         jsonpCallback: 'jsonFlickrApi', // add this property
         success: function (result, status, xhr) {
-            // console.log(result);
-            // console.log(result);
             // 拼接 URL
             //     https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
             $.each(result.photos.photo, function (i, photo) {
