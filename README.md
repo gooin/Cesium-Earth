@@ -12,6 +12,18 @@ Use  CesiumJS to Imitate a "Google Earth"
 
 # Images
 
+### JPGs
+
+![layerchooser](https://github.com/gooin/Cesium-Earth/blob/master/images/samples/layerchooser.jpg)
+
+![measure](https://github.com/gooin/Cesium-Earth/blob/master/images/samples/measure.jpg)
+
+### GIFs
+
+![myLocation](https://github.com/gooin/Cesium-Earth/blob/master/images/samples/cesium-earth-myLocation.gif)
+
+![measure](https://github.com/gooin/Cesium-Earth/blob/master/images/samples/cesium-earth-measure.gif)
+
 
 # References
 
