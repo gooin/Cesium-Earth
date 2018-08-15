@@ -167,3 +167,11 @@ html, body {
 #earth-measure-close:hover {
     cursor: pointer;
 }
+
+.modal-content{
+    background-color:rgba(0,0,0,0.2);
+}
+.modal-header, .modal-footer {
+    /*background-color: #000;*/
+    /*opacity: 0.5;*/
+}

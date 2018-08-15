@@ -6,9 +6,14 @@ $(function () {
 $(".fa-bars").click(function () {
     $('#navdrawer').navdrawer('show');
 });
+// 图层选择
 $("#menuLayerStyle").click(function () {
     $('#navdrawer').navdrawer('hide');
     $('#layerdrawer').navdrawer('show');
+});
+// 探索页面
+$(".fa-magic").click(function () {
+    $("#exploreModal").modal('show');
 });
 
 
@@ -142,13 +147,7 @@ function onload(Cesium) {
             measureHandler.clampMode = 0;
         }
 
-        // 开启全球照片
-        console.log(showGlobePhotos);
-        if (showGlobePhotos) {
-            // 获取屏幕中心点的经纬度
-            screenCenter = CesiumHandyFuns.screenCenterDegree(Cesium, viewer);
-            showPhotos(Cesium, viewer, screenCenter);
-        }
+
         // 指北针跟随
         var heading = scene.camera.heading;
         var x = Cesium.Math.toDegrees(heading - 0.01);
@@ -156,7 +155,7 @@ function onload(Cesium) {
         $("#compass").css("transform", degrees);
 
 
-        // 计算屏幕左上角坐标
+        //=====================计算屏幕坐标=======================
         var coordTopLeft = findCoordinate(new Cesium.Cartesian2(57, 0), new Cesium.Cartesian2(canvas.width, canvas.height))
         var degreeTopLeft = CesiumHandyFuns.cartesian3ToDegree(Cesium, coordTopLeft);
         // console.log(degreeTopLeft);
@@ -164,24 +163,36 @@ function onload(Cesium) {
         var coordBottomRight = findCoordinate(new Cesium.Cartesian2(canvas.width, canvas.height), new Cesium.Cartesian2(57, 0))
         var degreeBottomRight = CesiumHandyFuns.cartesian3ToDegree(Cesium, coordBottomRight);
         // console.log(degreeBottomRight);
+        var left = degreeTopLeft.longitude;
+        var bottom = degreeBottomRight.latitude;
+        var top = degreeBottomRight.longitude;
+        var right = degreeTopLeft.latitude;
 
         // 鹰眼viewer绘制主viewer视窗范围
         viewerNav.entities.removeAll();
-        var viewerRectangle = viewerNav.entities.add(new Cesium.Entity({
-            name: "viewerRectangle",
-            rectangle: {
-                coordinates: Cesium.Rectangle.fromDegrees(
-                    degreeTopLeft.longitude,
-                    degreeBottomRight.latitude,
-                    degreeBottomRight.longitude,
-                    degreeTopLeft.latitude),
-                material: Cesium.Color.RED.withAlpha(0.2),
-                height: 500,
-                outline: true, // height must be set for outline to display
-                outlineWidth:5,
-                outlineColor: Cesium.Color.RED
-            }
-        }));
+        if (top > bottom || right > left) {
+            var viewerRectangle = viewerNav.entities.add(new Cesium.Entity({
+                name: "viewerRectangle",
+                rectangle: {
+                    coordinates: Cesium.Rectangle.fromDegrees(left, bottom, top, right),
+                    material: Cesium.Color.RED.withAlpha(0.2),
+                    height: 500,
+                    outline: true, // height must be set for outline to display
+                    outlineWidth: 5,
+                    outlineColor: Cesium.Color.RED
+                }
+            }));
+        }
+
+
+        // 开启全球照片
+        console.log(showGlobePhotos);
+        if (showGlobePhotos) {
+            // 获取屏幕中心点的经纬度
+            var screenBounds = [left, bottom, top, right];
+            screenCenter = CesiumHandyFuns.screenCenterDegree(Cesium, viewer);
+            showPhotos(Cesium, viewer, screenBounds);
+        }
 
     });
     // 照片开关点击事件
@@ -327,6 +338,13 @@ function onload(Cesium) {
         }
         return;
     }
+
+
+    $(".show-scene").click(function (e) {
+        $("#exploreModal").modal('hide');
+        var niaochao = scene.open('http://www.supermapol.com/realspace/services/3D-Olympic/rest/realspace');
+        viewer.flyTo(niaochao,{duration:5});
+    })
 
 
 }
