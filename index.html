@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="initial-scale=1, shrink-to-fit=no, width=device-width" name="viewport">
+
+    <link href="https://fonts.loli.net/css?family=Roboto:300,300i,400,400i,500,500i,700,700i|Roboto+Mono:300,400,700|Roboto+Slab:300,400,700"
+          rel="stylesheet">
+    <link href="https://fonts.loli.net/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/material.min.css" rel="stylesheet">
+    <link href="css/widgets.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+    <!--<link href="css/font-awesome.min.css" rel="stylesheet">-->
+    <link href="css/css/index.css" rel="stylesheet">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <!-- Then Material JavaScript on top of Bootstrap JavaScript -->
+    <script src="js/material.min.js"></script>
+    <script src="js/cesiumX/handy-functions.js"></script>
+    <script src="./js/require.min.js" data-main="js/main"></script>
+
+</head>
+
+<body>
+
+<!--左侧菜单栏-->
+<div id="left-nav">
+    <!--<button data-target="#navdrawer" data-toggle="navdrawer" type="button">drawer</button>-->
+    <div class="icon-button">
+        <!--<i class="fas fa-bars fa-lg"  data-toggle="tooltip" data-placement="right" title="菜单" data-target="#navdrawer" data-toggle="navdrawer"></i>-->
+        <i class="fas fa-bars fa-lg" data-toggle="tooltip" data-placement="right" title="菜单"
+           data-target="#navdrawer"></i>
+        <i class="fas fa-search fa-lg" data-toggle="tooltip" data-placement="right" title="搜索"></i>
+        <i class="fas fa-magic fa-lg" data-toggle="tooltip" data-placement="right" title="探索"></i>
+        <i class="fas fa-basketball-ball fa-lg" data-toggle="tooltip" data-placement="right" title="手气不错"></i>
+        <i class="fas fa-bookmark fa-lg" data-toggle="tooltip" data-placement="right" title="我的地点"></i>
+        <i class="fas fa-share-alt fa-lg" data-toggle="tooltip" data-placement="right" title="分享"></i>
+        <i class="fas fa-pencil-ruler fa-lg" data-toggle="tooltip" data-placement="right" title="测量"
+           id="menuMeasure"></i>
+    </div>
+
+</div>
+<!--Cesium容器-->
+<div id="cesiumContainer">
+</div>
+
+<!--右下角状态栏-->
+<div id="earth-status">
+    <p id="alt" class="nums"></p>
+    <p id="lat" class="nums"></p>
+    <p id="lon" class="nums"></p>
+    <p id="camHeight" class="nums"></p>
+</div>
+<!--右下角导航-->
+<div id="earth-nav">
+    <div id="myLocation">
+        <div class="circle-background">
+            <i class="material-icons">
+                my_location
+            </i>
+        </div>
+    </div>
+    <div id="compass">
+        <div class="circle-background">
+            <i class="material-icons">
+                navigation
+            </i>
+        </div>
+    </div>
+
+
+    <div id="cesiumNavContainer"></div>
+</div>
+<!--右上角测量菜单-->
+<div id="earth-measure">
+    <!--<div id="measure-menu">-->
+    <!--<div class="jumbotron">-->
+    <!--<button type="button" id="measure-btn-restart" class="btn btn-outline-info"><i class="material-icons">-->
+    <!--settings_backup_restore-->
+    <!--</i>-->
+    <!--开始新的测量-->
+    <!--</button>-->
+    <!--<i class="material-icons float-right"-->
+    <!--id="earth-measure-close">-->
+    <!--clear-->
+    <!--</i>-->
+
+    <!--<hr class="my-2">-->
+    <!--<p>距离</p>-->
+    <!--<p class="lead" id="earth-measure-result">0 米</p>-->
+    <!--</div>-->
+    <!--</div>-->
+
+</div>
+
+<!---左侧菜单栏点击弹出导航菜单-->
+<div aria-hidden="true" class="navdrawer" id="navdrawer" tabindex="-1">
+    <div class="navdrawer-content">
+
+        <!--<div class="navdrawer-header">-->
+        <!--<a class="navbar-brand px-0" href="#">Cesium Earth</a>-->
+        <!--</div>-->
+        <nav class="navdrawer-nav">
+            <a class="navbar-brand" href="#">
+                <img src="images/earth.svg" width="25" height="25" class="d-inline-block align-top" alt="超图地球">
+                &nbsp;&nbsp;&nbsp;&nbsp;Supermap Earth
+            </a>
+            <a class="navbar-brand px-0" href="#"></a>
+            <a class="nav-item nav-link active" href="#">用户信息</a>
+            <a class="nav-item nav-link disabled" href="#"></a>
+            <a class="nav-item nav-link" href="#"></a>
+        </nav>
+        <div class="navdrawer-divider"></div>
+        <!--<p class="navdrawer-subheader">Navdrawer subheader</p>-->
+        <ul class="navdrawer-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-search fa-lg mr-5"></i>搜索</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-magic fa-lg mr-5"></i>探索者</a>
+            </li>
+            <li class="nav-item" id="menuLayerStyle">
+                <!--<a class="nav-link" href="#"data-target="#layerdrawer" data-toggle="navdrawer">-->
+                <a class="nav-link">
+                    <i class="far fa-images fa-lg mr-5"></i>地图样式</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <div class="custom-control custom-switch">
+                        <input class="custom-control-input" id="photoSwitch" type="checkbox">
+                        <span class="custom-control-track"></span>
+                        <label class="custom-control-label" for="photoSwitch">照片</label>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--图层选择菜单-->
+<div aria-hidden="true" class="navdrawer" id="layerdrawer" tabindex="-1">
+    <div class="layer-chooser navdrawer-content bg-light">
+        <nav class="navbar navbar-light bg-white">
+            <span class="navbar-brand mb-0 h1 ">地图样式</span>
+        </nav>
+        <!--简洁和全部样式卡片-->
+        <div class="cards">
+            <div class="card shadow-none" id="map-simple" style="width: 22rem;">
+                <div class="custom-control custom-radio map-radio">
+                    <input type="radio" id="map-simple-radio" name="map-simple-radio" class="custom-control-input">
+                    <label class="custom-control-label" for="map-simple-radio"></label>
+                </div>
+                <img class="card-img-top" src="images/map-styles/map_simple_.svg" alt="简洁">
+                <div class="card-body">
+                    <h6 class="card-text">简洁</h6>
+                    <p class="card-text text-muted">不显示边界、标签、地点或公路</p>
+                </div>
+            </div>
+
+            <div class="card shadow-none" id="map-all" style="width: 22rem;">
+                <div class="custom-control custom-radio map-radio">
+                    <input type="radio" id="map-all-radio" name="map-all-radio" class="custom-control-input">
+                    <label class="custom-control-label" for="map-all-radio"></label>
+                </div>
+                <img class="card-img-top" src="images/map-styles/map_all.svg" alt="全部">
+                <div class="card-body">
+                    <h6 class="card-text">全部</h6>
+                    <p class="card-text text-muted">显示所有边界、标签、地点、公路和水道。</p>
+                </div>
+            </div>
+        </div>
+        <div class="other-styles">
+            <div class="list-group" id="accordionOne">
+                <div class="expansion-panel list-group-item">
+                    <a aria-controls="collapseOne" aria-expanded="false" class="expansion-panel-toggler collapsed"
+                       data-toggle="collapse" href="#collapseOne" id="headingOne">
+                        其他样式
+                        <div class="expansion-panel-icon ml-3 text-black-secondary">
+                            <i class="collapsed-show material-icons">keyboard_arrow_down</i>
+                            <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
+                        </div>
+                    </a>
+                    <div aria-labelledby="headingOne" class="collapse" data-parent="#accordionOne" id="collapseOne">
+                        <div class="expansion-panel-body">
+                            <ul class="list-unstyled">
+                                <li class="media" data-name="streets">
+                                    <img class="mr-3" src="images/map-styles/streets.jpg"
+                                         alt="streets">
+                                    <div class="media-body">
+                                        <h4 class="mt-0 mb-1">街道</h4>
+                                        🚋 详细且全面
+                                    </div>
+                                </li>
+                                <li class="media my-4" data-name="dark">
+                                    <img class="mr-3" src="images/map-styles/dark.jpg"
+                                         alt="dark">
+                                    <div class="media-body">
+                                        <h4 class="mt-0 mb-1">黑暗</h4>
+                                        🕶️ 世界变黑了
+                                    </div>
+                                </li>
+                                <li class="media active" data-name="pirates">
+                                    <img class="mr-3" src=images/map-styles/pirates.jpg
+                                         alt="pirates">
+                                    <div class="media-body">
+                                        <h4 class="mt-0 mb-1">海盗</h4>
+                                        🏴‍☠️炫酷的海盗地图
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    // cesium here
+
+</script>
+
+
+<script src="js/js/index.js"></script>
+<script src="js/js/changeLayer.js"></script>
+<script src="js/js/measure.js"></script>
+<script src="js/js/photos.js"></script>
+
+</body>
+
+</html>

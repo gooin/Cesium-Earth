@@ -6,7 +6,7 @@
         {href:"./Build/Documentation/index.html",text:"类参考"},
         {href:"./examples/examples.html",text:"示范程序"},
         {href:"http://www.supermapol.com/earth/",text:"SuperMapEarth"},
-        //{href:"./demo/demo.html",text:"综合演示"},
+        //{href:"./demo/index.html",text:"综合演示"},
 		{href:"",text:"技术专题",dropdown:[
 			{href:"./examples/TopicDoc/SuperMapEarthFunctionTopic.html",text:"SuperMapEarth功能游览"},
             {href:"./examples/TopicDoc/FlyManagerTopic.html",text:"飞行管理专题"},
