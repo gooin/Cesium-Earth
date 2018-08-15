@@ -33,19 +33,23 @@ function onload(Cesium) {
     camera = scene.camera;
     canvas = viewer.canvas;
 
-
-
+    // 鹰眼导航 viewer
     viewerNav = new Cesium.Viewer('cesiumNavContainer', {
         skyAtmosphere: false,
-        skyBox: false
+        skyBox: false,
+        imageryProvider: new Cesium.MapboxImageryProvider({
+            url: 'https://api.mapbox.com/v4/',
+            mapId: 'mapbox.high-contrast',
+            maximumLevel: 4,
+            accessToken: 'pk.eyJ1IjoiZ29vaW4iLCJhIjoiY2ppY3RjcGd5MDRqcjNrbWFlanEyazk2OCJ9.-v6OvStrPvVwu2-Tx9Uogg'
+        })
     });
 
     // 设置鹰眼的div为圆形
     var viewerNavCanvas = viewerNav.canvas;
     viewerNavCanvas.setAttribute("class", "cesium-nav-circle ");
-
-    var masterCamera = camera;
-    var slaveCamera = viewerNav.scene.camera;
+    // var masterCamera = camera;
+    // var slaveCamera = viewerNav.scene.camera;
 
     // viewerNav.scene.preRender.addEventListener(function(){
     //     if(viewerNav.scene.mode !== Cesium.SceneMode.MORPHING){
@@ -60,8 +64,8 @@ function onload(Cesium) {
     //     }
     // });
 
+    // 鹰眼相机同步
     viewerNav.scene.preRender.addEventListener(function () {
-
         Cesium.Cartesian3.clone(camera.position, viewerNav.scene.camera.position);
         // Cesium.Cartesian3.clone(camera.newPosition, viewerNav.scene.camera.position);
         Cesium.Cartesian3.clone(camera.direction, viewerNav.scene.camera.direction);
@@ -70,8 +74,6 @@ function onload(Cesium) {
         viewerNav.scene.camera.lookAtTransform(camera.transform);
         // viewerNav.scene.camera.frustum.near=500000000;
         // viewerNav.scene.camera.frustum.far=500000000;
-
-
     });
 
 
@@ -126,7 +128,7 @@ function onload(Cesium) {
     measureFillColor = Cesium.Color.BLACK;
     measureBackgroundPadding = new Cesium.Cartesian2(8, 8);
 
-    // 获取相机高度
+    // 监听相机事件
     camera.changed.addEventListener(function () {
         // 获取地心到相机的高度
         magnitude = camera.getMagnitude();
@@ -151,18 +153,35 @@ function onload(Cesium) {
         var heading = scene.camera.heading;
         var x = Cesium.Math.toDegrees(heading - 0.01);
         var degrees = "rotate(" + x + "deg)";
-        // console.log(degrees);
         $("#compass").css("transform", degrees);
 
 
         // 计算屏幕左上角坐标
         var coordTopLeft = findCoordinate(new Cesium.Cartesian2(57, 0), new Cesium.Cartesian2(canvas.width, canvas.height))
         var degreeTopLeft = CesiumHandyFuns.cartesian3ToDegree(Cesium, coordTopLeft);
-        console.log(degreeTopLeft);
+        // console.log(degreeTopLeft);
         // 计算屏幕右下角坐标
-        var coordBottomRight = findCoordinate(new Cesium.Cartesian2(canvas.width, canvas.height),new Cesium.Cartesian2(57, 0))
+        var coordBottomRight = findCoordinate(new Cesium.Cartesian2(canvas.width, canvas.height), new Cesium.Cartesian2(57, 0))
         var degreeBottomRight = CesiumHandyFuns.cartesian3ToDegree(Cesium, coordBottomRight);
-        console.log(degreeBottomRight);
+        // console.log(degreeBottomRight);
+
+        // 鹰眼viewer绘制主viewer视窗范围
+        viewerNav.entities.removeAll();
+        var viewerRectangle = viewerNav.entities.add(new Cesium.Entity({
+            name: "viewerRectangle",
+            rectangle: {
+                coordinates: Cesium.Rectangle.fromDegrees(
+                    degreeTopLeft.longitude,
+                    degreeBottomRight.latitude,
+                    degreeBottomRight.longitude,
+                    degreeTopLeft.latitude),
+                material: Cesium.Color.RED.withAlpha(0.2),
+                height: 500,
+                outline: true, // height must be set for outline to display
+                outlineWidth:5,
+                outlineColor: Cesium.Color.RED
+            }
+        }));
 
     });
     // 照片开关点击事件
@@ -285,7 +304,7 @@ function onload(Cesium) {
         var sy = (y1 < y2) ? 1 : -1;
         var err = dx - dy;
 
-        coordinate = scene.camera.pickEllipsoid({ x: x1, y: y1 }, this.ellipsoid);
+        coordinate = scene.camera.pickEllipsoid({x: x1, y: y1}, this.ellipsoid);
         if (coordinate) {
             return coordinate;
         }
@@ -301,7 +320,7 @@ function onload(Cesium) {
                 y1 += sy;
             }
 
-            coordinate = scene.camera.pickEllipsoid({ x: x1, y: y1 }, this.ellipsoid);
+            coordinate = scene.camera.pickEllipsoid({x: x1, y: y1}, this.ellipsoid);
             if (coordinate) {
                 return coordinate;
             }
