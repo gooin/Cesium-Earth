@@ -146,6 +146,13 @@ function onload(Cesium) {
         } else {
             measureHandler.clampMode = 0;
         }
+        // 当相机高度小于5000km时，停止自动旋转
+        if (cameraHeight < 5000) {
+            if(viewer.clock.onTick._listeners.length > 1){
+                viewer.clock.onTick.removeEventListener(autoRotate);
+            }
+        }
+
 
 
         // 指北针跟随
@@ -193,7 +200,6 @@ function onload(Cesium) {
             screenCenter = CesiumHandyFuns.screenCenterDegree(Cesium, viewer);
             showPhotos(Cesium, viewer, screenBounds);
         }
-
     });
     // 照片开关点击事件
     $(".custom-switch").mousedown(function () {
@@ -340,7 +346,7 @@ function onload(Cesium) {
         return;
     }
 
-
+    //================================探索界面卡片点击===================================
     $("#niaochao").click(function (e) {
         $("#exploreModal").modal('hide');
         var niaochao = scene.open('http://www.supermapol.com/realspace/services/3D-Olympic/rest/realspace');
@@ -373,5 +379,15 @@ function onload(Cesium) {
         viewer.flyTo(vector, {duration: 5});
     });
 
+    //==================================地球自动旋转=====================================
+    var lastNow = Date.now();
+    var autoRotate = function(){
+        var now = Date.now();
+        var spinRate = 0.02;
+        var delta = (now - lastNow) / 1000;
+        lastNow = now;
+        viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, -spinRate * delta);
+    };
+    viewer.clock.onTick.addEventListener(autoRotate);
 
 }
