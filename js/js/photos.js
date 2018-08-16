@@ -12,9 +12,6 @@
 
 
 function showPhotos(Cesium, viewer, screenBounds) {
-
-
-
     // var flickrAPI = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=西安";
     // 获取照片列表 URL
     // var flickrSearch = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=388ddf77385fe21f59b62b5133f96d8a&tags=nature,city&accuracy=1&content_type=1&has_geo=1&per_page=100&format=json";
@@ -83,6 +80,8 @@ function showPhotos(Cesium, viewer, screenBounds) {
                                 // rotation : Cesium.Math.PI_OVER_FOUR
                             }
                         }));
+                        // 添加flickr id 属性信息
+                        billboard.flickrID=id;
 
                         billboardArr.push(billboard);
                         console.log(billboardArr);

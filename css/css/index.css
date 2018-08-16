@@ -180,3 +180,10 @@ html, body {
 .card-img-top {
     height: 10rem;
 }
+
+#infobox{
+    z-index: 100;
+    position: absolute;
+    top:100px;
+    left: 200px;
+}

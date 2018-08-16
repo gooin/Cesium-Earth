@@ -148,11 +148,10 @@ function onload(Cesium) {
         }
         // 当相机高度小于5000km时，停止自动旋转
         if (cameraHeight < 5000) {
-            if(viewer.clock.onTick._listeners.length > 1){
+            if (viewer.clock.onTick._listeners.length > 1) {
                 viewer.clock.onTick.removeEventListener(autoRotate);
             }
         }
-
 
 
         // 指北针跟随
@@ -212,9 +211,38 @@ function onload(Cesium) {
             console.log(billboardArr);
         } else {
             billboardArr.map(function (billboard) {
-                billboardArr=[];
+                billboardArr = [];
                 billboard.show = true;
             });
+            // TODO:点击获得布告板信息,弹窗显示大图
+            // 根据传回的flickrID 查询图片详细信息并显示
+            // var bHandler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+            // bHandler.setInputAction(function (click) {
+            //     var pickedObject = scene.pick(click.position);
+            //     if (Cesium.defined(pickedObject)) {
+            //         var infoboxContainer = document.getElementById("infobox");
+            //         viewer.customInfobox = infoboxContainer;
+            //         var widget = viewer.CesiumWidget;
+            //         console.log(pickedObject);
+            //         console.log(pickedObject.id._name);
+            //         console.log(pickedObject.id.flickrID);
+            //         // image url
+            //         console.log(pickedObject.primitive._imageId);
+            //
+            //         //添加自定义infobox
+            //         var title = document.getElementById("infobox-title");
+            //         var address = document.getElementById("infobox-address");
+            //         var img = document.getElementById("infobox-image");
+            //
+            //         var title1 = Cesium.defaultValue(pickedObject.id.flickrID, '');
+            //         var address1 = Cesium.defaultValue(pickedObject.id._name, '');
+            //         console.log(title1);
+            //         console.log(address1);
+            //         title.innerText = title1;
+            //         address.innerText = address1;
+            //         img.src = img;
+            //     }
+            // }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
             console.log(billboardArr);
         }
     });
@@ -381,7 +409,7 @@ function onload(Cesium) {
 
     //==================================地球自动旋转=====================================
     var lastNow = Date.now();
-    var autoRotate = function(){
+    var autoRotate = function () {
         var now = Date.now();
         var spinRate = 0.02;
         var delta = (now - lastNow) / 1000;
