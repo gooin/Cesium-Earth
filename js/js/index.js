@@ -45,7 +45,7 @@ function onload(Cesium) {
         imageryProvider: new Cesium.MapboxImageryProvider({
             url: 'https://api.mapbox.com/v4/',
             mapId: 'mapbox.high-contrast',
-            maximumLevel: 4,
+            maximumLevel: 14,
             accessToken: 'pk.eyJ1IjoiZ29vaW4iLCJhIjoiY2ppY3RjcGd5MDRqcjNrbWFlanEyazk2OCJ9.-v6OvStrPvVwu2-Tx9Uogg'
         })
     });
@@ -170,7 +170,7 @@ function onload(Cesium) {
 
         // 鹰眼viewer绘制主viewer视窗范围
         viewerNav.entities.removeAll();
-        if (top > bottom || right > left) {
+        if (top > bottom && right > left) {
             var viewerRectangle = viewerNav.entities.add(new Cesium.Entity({
                 name: "viewerRectangle",
                 rectangle: {
@@ -206,6 +206,7 @@ function onload(Cesium) {
             console.log(billboardArr);
         } else {
             billboardArr.map(function (billboard) {
+                billboardArr=[];
                 billboard.show = true;
             });
             console.log(billboardArr);
@@ -340,11 +341,37 @@ function onload(Cesium) {
     }
 
 
-    $(".show-scene").click(function (e) {
+    $("#niaochao").click(function (e) {
         $("#exploreModal").modal('hide');
         var niaochao = scene.open('http://www.supermapol.com/realspace/services/3D-Olympic/rest/realspace');
-        viewer.flyTo(niaochao,{duration:5});
-    })
+        viewer.flyTo(niaochao, {duration: 5});
+        var niaochaoWater = scene.addS3MTilesLayerByScp(URL_CONFIG.SCP_NIAOCHAO_WATER, {name: 'water'});
+    });
+    $("#suofeiya").click(function (e) {
+        $("#exploreModal").modal('hide');
+        var suofeiya = scene.addS3MTilesLayerByScp(URL_CONFIG.SCP_SUOFEIYA);
+        viewer.flyTo(suofeiya, {duration: 5});
+    });
+    $("#pointcloud").click(function (e) {
+        $("#exploreModal").modal('hide');
+        var pointCloud = scene.addS3MTilesLayerByScp("http://www.supermapol.com/realspace/services/3D-cloud/rest/realspace/datas/POINTCLOUD23/config");
+        Cesium.when(pointCloud, function (layer) {
+            //设置相机位置、视角，便于观察场景
+            scene.camera.setView({
+                destination: new Cesium.Cartesian3(-3726950.8178392285, 3087276.1287523108, 4154724.882310502),
+                orientation: {
+                    heading: 3.7690494906963523,
+                    pitch: 0.014489436405058287,
+                    roll: 6.283185307179586
+                }
+            });
+        });
+    });
+    $("#vector").click(function (e) {
+        $("#exploreModal").modal('hide');
+        var vector = scene.open('http://www.supermapol.com/realspace/services/3D-GuangZhou/rest/realspace');
+        viewer.flyTo(vector, {duration: 5});
+    });
 
 
 }

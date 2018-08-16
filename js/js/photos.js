@@ -73,7 +73,7 @@ function showPhotos(Cesium, viewer, screenBounds) {
                                 width: 40,
                                 height: 40,
                                 // alignedAxis:Cesium.Cartesian3.UNIT_Z,
-                                // eyeOffset: new Cesium.Cartesian3(0.0, 20, 0.0),
+                                eyeOffset: new Cesium.Cartesian3(0.0, 20, 0.0),
                                 // pixelOffset: new Cesium.Cartesian2(0, -10),
                                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
                                 // 布告板贴地不被地形淹没

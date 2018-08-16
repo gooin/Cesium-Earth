@@ -22,6 +22,7 @@
     <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <!-- Then Material JavaScript on top of Bootstrap JavaScript -->
     <script src="js/material.min.js"></script>
+    <script src="js/config.js"></script>
     <script src="js/cesiumX/handy-functions.js"></script>
     <script src="./js/require.min.js" data-main="js/main"></script>
 
@@ -47,7 +48,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade bd-example-modal-lg" id="exploreModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="exploreModal" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
 
         <div class="modal-content">
@@ -65,33 +67,57 @@
                         <div class="card">
                             <img alt="cbd" class="card-img-top" src="images/S3MTiles_niaochao_water.jpg">
                             <div class="card-body">
-                                <h4 class="card-title">3D CBD</h4>
-                                <p class="card-text">三维场景</p>
+                                <h4 class="card-title">鸟巢</h4>
+                                <p class="card-text">精细模型</p>
                             </div>
                             <div class="card-actions">
-                                <a class="btn btn-outline-primary show-scene"href="#">查看</a>
+                                <a class="btn btn-outline-primary" id="niaochao" href="#">查看</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="card">
-                            <img alt="cbd" class="card-img-top" src="images/S3MTiles_niaochao_water.jpg">
+                            <img alt="cbd" class="card-img-top" src="images/S3MTiles_suofeiya.jpg">
                             <div class="card-body">
-                                <h4 class="card-title">3D CBD</h4>
-                                <p class="card-text">三维场景</p>
+                                <h4 class="card-title">圣索菲亚大教堂</h4>
+                                <p class="card-text">哈尔滨</p>
                             </div>
                             <div class="card-actions">
-                                <a class="btn btn-outline-primary" href="#">查看</a>
+                                <a class="btn btn-outline-primary" id="suofeiya" href="#">查看</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-sm-6">-->
+                        <!--<div class="card">-->
+                            <!--<img alt="cbd" class="card-img-top" src="images/S3MTiles_pointCloud.jpg">-->
+                            <!--<div class="card-body">-->
+                                <!--<h4 class="card-title">点云数据</h4>-->
+                                <!--<p class="card-text">展示</p>-->
+                            <!--</div>-->
+                            <!--<div class="card-actions">-->
+                                <!--<a class="btn btn-outline-primary" id="pointcloud" href="#">查看</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <img alt="cbd" class="card-img-top" src="images/S3MTiles_vector.jpg">
+                            <div class="card-body">
+                                <h4 class="card-title">矢量白模</h4>
+                                <p class="card-text">广州</p>
+                            </div>
+                            <div class="card-actions">
+                                <a class="btn btn-outline-primary" id="vector" href="#">查看</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            <!--<div class="modal-footer">-->
+            <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+            <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            <!--</div>-->
 
         </div>
     </div>
