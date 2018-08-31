@@ -321,11 +321,35 @@ function onload(Cesium) {
             var alt = carto.height;
             var lon = Cesium.Math.toDegrees(carto.longitude);
             var lat = Cesium.Math.toDegrees(carto.latitude);
+
+
+            // 经纬度转度分秒
+            function transformDMS(degree, direction) {
+                var D = Math.floor(degree);
+                var M = Math.floor((degree - D) * 60);
+                var S = Math.floor(((degree - D) * 60 - M) * 60);
+                var result = D + "°" + M + "′" + S + "″";
+                if (direction === "lon") {
+                    D > 0 ? result += "E" : result += "W";
+                    return result;
+                }
+                if (direction === "lat") {
+                    D > 0 ? result += "N" : result += "S";
+                    return result;
+                }
+                return result;
+            }
+
+            var lonDMS = transformDMS(lon, "lon");
+            var latDMS = transformDMS(lat, "lat");
+
             // 默认相机高度为 15000km
             cameraHeight == undefined ?
                 $("#camHeight").html("相机：15000千米&nbsp;&nbsp;") : $("#camHeight").html("相机：" + cameraHeight + "千米&nbsp;&nbsp;");
-            $("#lon").html("经度:" + lon.toFixed(5));
-            $("#lat").html("&nbsp;纬度:" + lat.toFixed(5) + "&nbsp;");
+            // $("#lon").html("经度:" + lon.toFixed(5));
+            // $("#lat").html("&nbsp;纬度:" + lat.toFixed(5) + "&nbsp;");
+            $("#lon").html("经度:" + lonDMS);
+            $("#lat").html("&nbsp;纬度:" + latDMS + "&nbsp;");
             if (cameraHeight < 2000) {
                 $("#alt").html("&nbsp;&nbsp;海拔：" + alt.toFixed(0) + "米&nbsp;");
             } else {
