@@ -18,7 +18,7 @@ $(".fa-magic").click(function () {
 
 
 var viewer, viewerNav, scene, camera, canvas, magnitude,
-    imageryLayers, cameraHeight, baseLayer, measureHandler, screenCenter;
+    imageryLayers, cameraHeight, cameraHeightValue, baseLayer, measureHandler, screenCenter;
 var mapboxSatelliteProvider, mapboxStreetsSatelliteProvider,
     mapboxStreetsProvider, mapboxDarkProvider, mapboxPiratesProvider;
 var measureBackgroundColor, measureFillColor, measureBackgroundPadding, measurePolylineColor;
@@ -135,11 +135,7 @@ function onload(Cesium) {
 
     // 监听相机事件
     camera.changed.addEventListener(function () {
-        // 获取地心到相机的高度
-        magnitude = camera.getMagnitude();
-        // 相机高度（km）： 地心到相机高度减去地球半径
-        cameraHeight = (magnitude - 6371000) / 1000;
-        cameraHeight = parseFloat(cameraHeight).toFixed(0);
+
         // 当相机高度小于200km时，测量结果为贴地模式
         if (cameraHeight < 200) {
             measureHandler.clampMode = 1;
@@ -152,13 +148,6 @@ function onload(Cesium) {
                 viewer.clock.onTick.removeEventListener(autoRotate);
             }
         }
-
-
-        // 指北针跟随
-        var heading = scene.camera.heading;
-        var x = Cesium.Math.toDegrees(heading - 0.01);
-        var degrees = "rotate(" + x + "deg)";
-        $("#compass").css("transform", degrees);
 
 
         //=====================计算屏幕坐标=======================
@@ -310,6 +299,39 @@ function onload(Cesium) {
         });
     });
 
+    var prevHeading, heading;
+    scene.postRender.addEventListener(function () {
+        //==================================
+        // 指北针跟随
+        //==================================
+
+        // 解决在相机在一定高度缩放时， heading突变的问题
+        prevHeading = heading;
+        heading = scene.camera.heading;
+        if (prevHeading - heading > 3) {
+            heading = heading * 2;
+        }
+        // 指北针跟随
+        var x = Cesium.Math.toDegrees(heading - 0.01);
+        var degrees = "rotate(" + x + "deg)";
+        $("#compass").css("transform", degrees);
+
+        //==================================
+        // 获取地心到相机的高度
+        //==================================
+
+        // 高度
+        cameraHeight = camera.positionCartographic.height / 1000;
+        // 加单位用于显示
+        cameraHeightValue = camera.positionCartographic.height;
+        if (cameraHeightValue < 10000) {
+            cameraHeightValue = parseFloat(cameraHeightValue).toFixed(0) + "米";
+        } else {
+            cameraHeightValue = cameraHeightValue / 1000;
+            cameraHeightValue = parseFloat(cameraHeightValue).toFixed(0) + "千米";
+        }
+    });
+
 
     // 鼠标移动事件手柄，用于显示右下角状态
     var moveHandler = new Cesium.ScreenSpaceEventHandler;
@@ -322,13 +344,24 @@ function onload(Cesium) {
             var lon = Cesium.Math.toDegrees(carto.longitude);
             var lat = Cesium.Math.toDegrees(carto.latitude);
 
-
             // 经纬度转度分秒
             function transformDMS(degree, direction) {
-                var D = Math.floor(degree);
-                var M = Math.floor((degree - D) * 60);
-                var S = Math.floor(((degree - D) * 60 - M) * 60);
+                var D = addZeroAtHead(Math.floor(degree));
+                var M = addZeroAtHead(Math.floor((degree - D) * 60));
+                var S = addZeroAtHead(Math.floor(((degree - D) * 60 - M) * 60));
                 var result = D + "°" + M + "′" + S + "″";
+
+                // 如果是个位数， 则在首位加 0
+                function addZeroAtHead(num) {
+                    if (num > -10 && num < 0) {
+                        num = "-0" + Math.abs(num)
+                    }
+                    if (num > 0 && num < 10) {
+                        return "0" + num
+                    }
+                    return num;
+                }
+
                 if (direction === "lon") {
                     D > 0 ? result += "E" : result += "W";
                     return result;
@@ -345,7 +378,7 @@ function onload(Cesium) {
 
             // 默认相机高度为 15000km
             cameraHeight == undefined ?
-                $("#camHeight").html("相机：15000千米&nbsp;&nbsp;") : $("#camHeight").html("相机：" + cameraHeight + "千米&nbsp;&nbsp;");
+                $("#camHeight").html("相机：15000千米&nbsp;&nbsp;") : $("#camHeight").html("相机：" + cameraHeightValue + "&nbsp;&nbsp;");
             // $("#lon").html("经度:" + lon.toFixed(5));
             // $("#lat").html("&nbsp;纬度:" + lat.toFixed(5) + "&nbsp;");
             $("#lon").html("经度:" + lonDMS);
